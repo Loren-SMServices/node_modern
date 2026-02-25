@@ -55,6 +55,19 @@ Gracias a la integración de `@fastify/swagger` y la forma en que pasamos las va
 - **`GET /api/users`**: Obtiene el listado de usuarios (Validado por el Data Contract de Zod).
 - **`POST /api/users`**: Crear un nuevo usuario (Swagger UI validará internamente el Name y Email gracias a la configuración de Zod antes de enviarlo).
 
+## Variables de Entorno y Seguridad CORS
+
+Para asegurar la comunicación entre tu servidor y el *frontend* final (como React, Vue o Vite), hemos integrado el analizador de orígenes en formato variable (`@fastify/cors`). 
+
+Con esto garantizas que solo dominios de tu confianza accedan a la API, filtrando todo lo demás por defecto en producción o abriendo los permisos (*) si no las defines temporalmente para testeo inicial.
+
+Crea o define en tu entorno de variables `.env` las URLs separadas por coma permitidas bajo el atributo explícito de **`CORS_ORIGINS`**:
+
+```env
+# Ejemplo limitando la API a local (Vite) y a tu produccion real
+CORS_ORIGINS=http://localhost:5173,https://mi-panel-admin.com
+```
+
 ## Despliegue con Docker
 
 Esta infraestructura está construida pensando en producción utilizando microservicios dockerizados, apoyándose en la imagen ultraligera oficial de Bun. A continuación, el detalle de los archivos relacionados:
