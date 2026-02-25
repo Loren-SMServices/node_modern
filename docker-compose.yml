@@ -1,0 +1,58 @@
+services:
+  # 1. API Service (El Modern Node App ejecutado por Bun)
+  api:
+    build: .
+    container_name: nodemodern_api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgres://demo_user:demo_password@postgres:5432/nodemodern
+      - REDIS_URL=redis://redis:6379
+      - NODE_ENV=development # Esto permite usar modo local dentro de docker
+    depends_on:
+      - postgres
+      - redis
+    # Opcional (montar tu código fuente para hot-reloading dentro de Docker en desarrollo):
+    # volumes:
+    #   - ./src:/usr/src/app/src
+
+    # 2. Base de Datos (PostgreSQL) para Drizzle ORM
+  postgres:
+    image: postgres:15-alpine
+    container_name: nodemodern_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: demo_user
+      POSTGRES_PASSWORD: demo_password
+      POSTGRES_DB: nodemodern
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # 3. Redis para Caché o Colas (BullMQ)
+  redis:
+    image: redis:7-alpine
+    container_name: nodemodern_redis
+    restart: always
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  # 4. Panel Visual de Base de Datos (PGWeb)
+  pgweb:
+    image: sosedoff/pgweb
+    container_name: nodemodern_pgweb
+    restart: always
+    environment:
+      - DATABASE_URL=postgres://demo_user:demo_password@postgres:5432/nodemodern?sslmode=disable
+    ports:
+      - "8081:8081"
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
+  redis_data:
