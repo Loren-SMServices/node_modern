@@ -1,7 +1,5 @@
 # Modern Node Stack Project
 
-Este es un proyecto base diseñado siguiendo los principios del "Modern Node" en un entorno "Antigravity" para lograr velocidad, mantenibilidad y tipado estricto óptimos.
-
 ## Tecnologías ("The Modern Node Stack")
 
 - **Framework**: [Fastify](https://fastify.dev/) - Hasta 5 veces más rápido que Express. Usa un sistema de plugins que evita cargar código innecesario.
