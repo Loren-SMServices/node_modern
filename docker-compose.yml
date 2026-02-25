@@ -6,10 +6,8 @@ services:
     restart: unless-stopped
     ports:
       - "3000:3000"
-    environment:
-      - DATABASE_URL=postgres://demo_user:demo_password@postgres:5432/nodemodern
-      - REDIS_URL=redis://redis:6379
-      - NODE_ENV=development # Esto permite usar modo local dentro de docker
+    env_file:
+      - .env
     depends_on:
       - postgres
       - redis
@@ -22,10 +20,8 @@ services:
     image: postgres:15-alpine
     container_name: nodemodern_postgres
     restart: always
-    environment:
-      POSTGRES_USER: demo_user
-      POSTGRES_PASSWORD: demo_password
-      POSTGRES_DB: nodemodern
+    env_file:
+      - .env
     ports:
       - "5432:5432"
     volumes:
@@ -46,8 +42,8 @@ services:
     image: sosedoff/pgweb
     container_name: nodemodern_pgweb
     restart: always
-    environment:
-      - DATABASE_URL=postgres://demo_user:demo_password@postgres:5432/nodemodern?sslmode=disable
+    env_file:
+      - .env
     ports:
       - "8081:8081"
     depends_on:

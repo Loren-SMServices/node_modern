@@ -1,6 +1,7 @@
 import fastify from 'fastify';
 import fastifySwagger from '@fastify/swagger';
 import fastifySwaggerUi from '@fastify/swagger-ui';
+import fastifyCors from '@fastify/cors';
 import dbPlugin from './plugins/db.plugin';
 import userRoutes from './routes/user.routes';
 
@@ -14,6 +15,14 @@ const app = fastify({
             useDefaults: true
         }
     }
+});
+
+// Configuración de CORS dinámico para frontend
+app.register(fastifyCors, {
+    // Si process.env.CORS_ORIGINS existe (ej: "http://localhost:5173,https://miweb.com"), separa por comas.
+    // Si no existe, permite todas las conexiones ('*') para facilitar el desarrollo local inicial.
+    origin: process.env.CORS_ORIGINS ? process.env.CORS_ORIGINS.split(',') : '*',
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 });
 
 // Registrando Swagger para Interfaz Visual de la API
